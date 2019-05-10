@@ -9,6 +9,8 @@
 # dependencies
 /node_modules
 ./book-app-backend/node_modules
+./book-app-frontend/package-lock.json
+./book-app-backend/package-lock.json
 localhost.sh
 
 # IDEs and editors
