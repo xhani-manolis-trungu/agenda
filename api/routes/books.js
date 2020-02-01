@@ -65,27 +65,26 @@ router.get("/book-details/:bookId", checkAuth, (req, res, next) => {
 router.post("/add-book", checkAuth, (req, res, next) => {
     const book = new Book({
         _id: new mongoose.Types.ObjectId(),
-        title:req.body.title,
-        author:req.body.author,
+        title: req.body.title,
+        author: req.body.author,
         isbn: req.body.isbn,
-        price:req.body.price,
+        price: req.body.price,
     });
     book
-    .save()
-    .then(result => {
-        console.log(result);
-        res.status(201).json({
-            message:"Book successfully added",
+        .save()
+        .then(result => {
+            console.log(result);
+            res.status(201).json({
+                message: "Book successfully added",
+            });
+        })
+        .catch(err => {
+            res.end()
         });
-    })
-    .catch(err => {
-        res.end()
-    });
 });
 
 router.patch("/update-book/:bookId", checkAuth, (req, res, next) => {
     const id = req.params.bookId;
-    const updateOps = {};
 
     Book.update({ _id: id }, { $set: req.body })
         .exec()
