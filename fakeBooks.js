@@ -1,15 +1,17 @@
 const faker = require('faker')
 
-var i;
-for (i = 0; i < 30; i++) {
-
-    const Books = {
+function Books() {
+var Books = [];
+for (var i = 0; i < 30; i++) {
+    Book = {
         title: faker.lorem.words(),
         author: faker.name.findName(),
         isbn: faker.random.number(),
         price: faker.commerce.price()
     }
-    console.log(JSON.stringify(Books, null, 2));
+    Books.push(Book);
+}
+return Books
 }
 
 module.exports = Books;

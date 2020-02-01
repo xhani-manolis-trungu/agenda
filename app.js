@@ -12,14 +12,13 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const mongoURL = process.env.MONGOCONNECT;
 
-console.log('Started server')
 server.listen(port, function() {
     console.log(`Server listening on port ${port}`)
 });
 
 mongoose.connect(
     mongoURL,
-    {useNewUrlParser: true, useCreateIndex: true}
+    {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true}
 );
 
 app.use(morgan('dev'));
@@ -33,12 +32,10 @@ app.use(function(req,res,next){
 		"Access-Control-Allow-Headers", "*"
 	);
 	if(req.method === 'OPTIONS'){
-        console.log('header-interceptor: ===OPTIONS.')
 		var headers = {};
 		headers["Access-Control-Allow-Methods"] = "POST, PATCH ,GET, PUT, DELETE, OPTIONS";
 		res.writeHead(200, headers);
 		res.end();
-        console.log('header-interceptor: Headers set.')
 	}
     next();
 })
@@ -54,13 +51,10 @@ app.use((req,res,next) => {
 
 app.use((error, req, res, next) => {
     console.log('header-interceptor: error 500.')
-
+    if(error) {
+        res.send(error.status)
+    }
     res.status(error.status || 500);
-    // res.json({
-    //     error:{
-    //         message:error.message
-    //     }
-    // });
 });
 
 module.exports = app;
