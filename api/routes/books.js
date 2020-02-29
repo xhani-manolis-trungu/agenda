@@ -8,7 +8,7 @@ const paginate = require("express-paginate");
 const Books = require("../../fakeBooks");
 const _ = require("lodash");
 
-app.use(paginate.middleware(10, 50));
+app.use(paginate.middleware(1, 15));
 console.log(`Pagination: ${JSON.stringify(paginate, null, 2)}`);
 
 router.get("/all-books", checkAuth, (req, res, next) => {

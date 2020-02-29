@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const port = process.env.port || 3001;
+const path = require('path');
+const port = process.env.PORT || 3001;
+const host = '0.0.0.0';
 const server = http.createServer(app);
 
 const bookRoutes = require('./api/routes/books');
@@ -12,9 +14,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const mongoURL = process.env.MONGOCONNECT;
 
-server.listen(port, function () {
-    console.log(`Server listening on port ${port}`)
-});
+const CLIENT_BUILD_PATH = path.join(__dirname, '../../client/build');
 
 mongoose.connect(
     mongoURL,
@@ -42,6 +42,14 @@ app.use(function (req, res, next) {
 
 app.use('/user', userRoutes);
 app.use('/books', bookRoutes);
+
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function (request, response) {
+    response.sendFile(path.join(CLIENT_BUILD_PATH, 'index.html'));
+});
+
+app.listen(port, host);
+console.log(`Running on http://${host}:${port}`);
 
 app.use((req, res, next) => {
     const error = new Error("Not Found");
